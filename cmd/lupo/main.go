@@ -24,6 +24,16 @@ const (
 )
 
 func main() {
+	convertLuaToYaml()
+	runPorter()
+}
+
+func convertLuaToYaml() {
+	// Is porter.lua is not present, skip conversion
+	if _, err := os.Stat(luaScriptPath); os.IsNotExist(err) {
+		return
+	}
+
 	// Fire up Lua
 	state := lua.NewState()
 	defer state.Close()
@@ -45,7 +55,9 @@ func main() {
 	check(err)
 	err = ioutil.WriteFile(yamlPath, out, 0644)
 	check(err)
+}
 
+func runPorter() {
 	// Run Porter CLI as subproccess, passing along any arguments
 	cmd := exec.Command(postRunExecutable, strings.Join(os.Args[1:], " "))
 	usr, err := user.Current()
@@ -59,14 +71,14 @@ func main() {
 	check(err)
 }
 
-func check(e error) {
-	if e != nil {
-		panic(e)
-	}
-}
-
 func lowerCamelCase(s string) string {
 	a := []rune(s)
 	a[0] = unicode.ToLower(a[0])
 	return string(a)
+}
+
+func check(e error) {
+	if e != nil {
+		panic(e)
+	}
 }
