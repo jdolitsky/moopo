@@ -22,9 +22,9 @@ Just build from source and copy into PATH (requires git, make, and Go 1.11+):
 
 Simply use the `lupo` command in place of the `porter` command.
 
-Define your bundle in `porter.lua` instead of `porter.yaml`.
+Replace your existing `porter.yaml` bundle definition with `porter.lua`.
 
-Here is a simple `porter.lua` example:
+Here is a simple `porter.lua` example (notice global `bundle` variable):
 ```lua
 local name = "my-bundle"
 local version = "0.1.0"
@@ -62,7 +62,15 @@ bundle = {
 }
 ```
 
-Notice the globally-defined variable, `bundle`. This is important, as it is used as the top level object to generate `porter.yaml`.
+Run `lupo` to build the bundle from `porter.lua`:
+```
+$ lupo build
+Copying dependencies ===>
+Copying mixins ===>
+Copying mixin exec ===>
+Copying mixin porter ===>
+...
+```
 
 If a file named `porter.lua` is detected in the working directory, `lupo` will attempt to use this to generate a `porter.yaml` file in the format expected by Porter, then run Porter itself.
 
