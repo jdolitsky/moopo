@@ -6,7 +6,7 @@
 
 ## Install
 
-*Note: system should already have a working Porter installation (see [install instructions](https://porter.sh/install/))*
+*Note: system should already have a working Porter installation (see [install instructions](https://porter.sh/install/)). There must also be a `luac` executable in PATH (temporarily required by [Azure/golua](https://github.com/Azure/golua)).*
 
 Just build from source and copy into PATH (requires git, make, and Go 1.11+):
 ```
