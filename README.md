@@ -20,7 +20,9 @@ Just build from source and copy into PATH (requires git, make, and Go 1.11+):
 
 ## How to use
 
-Simply use the `lupo` command in place of the `porter` command. Define your bundle in `porter.lua` instead of `porter.yaml`.
+Simply use the `lupo` command in place of the `porter` command.
+
+Define your bundle in `porter.lua` instead of `porter.yaml`.
 
 Here is a simple `porter.lua` example:
 ```lua
