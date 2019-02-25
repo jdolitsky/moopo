@@ -20,13 +20,9 @@ Just build from source and copy into PATH (requires git, make, and Go 1.11+):
 
 ## How to use
 
-Simply use the `lupo` command in place of the `porter` command.
+Simply use the `lupo` command in place of the `porter` command. Define your bundle in `porter.lua` instead of `porter.yaml`.
 
-If a file named `porter.lua` is detected in the working directory, `lupo` will attempt to use this to generate a `porter.yaml` file in the format expected by Porter, then run Porter itself.
-
-Note: if there is an existing `porter.yaml`, it will be completely overwritten. You may even wish to place `porter.yaml` in your `.gitignore`, as it is dynamically generated each run.
-
-Here is a simple `porter.lua` example :
+Here is a simple `porter.lua` example:
 ```lua
 local name = "my-bundle"
 local version = "0.1.0"
@@ -65,3 +61,7 @@ bundle = {
 ```
 
 Notice the globally-defined variable, `bundle`. This is important, as it is used as the top level object to generate `porter.yaml`.
+
+If a file named `porter.lua` is detected in the working directory, `lupo` will attempt to use this to generate a `porter.yaml` file in the format expected by Porter, then run Porter itself.
+
+Note: if there is an existing `porter.yaml`, it will be completely overwritten. You may even wish to place `porter.yaml` in your `.gitignore`, as it is dynamically generated each run.
