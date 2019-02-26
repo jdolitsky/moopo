@@ -7,7 +7,6 @@ import (
 	"os/exec"
 	"os/user"
 	"path"
-	"strings"
 	"unicode"
 
 	"github.com/Azure/golua/lua"
@@ -59,7 +58,7 @@ func convertLuaToYaml() {
 
 func runPorter() {
 	// Run Porter CLI as subproccess, passing along any arguments
-	cmd := exec.Command(postRunExecutable, strings.Join(os.Args[1:], " "))
+	cmd := exec.Command(postRunExecutable, os.Args[1:]...)
 	usr, err := user.Current()
 	check(err)
 	cmd.Env = append([]string{
