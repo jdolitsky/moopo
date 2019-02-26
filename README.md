@@ -1,68 +1,46 @@
 <img align="right" src="lupo.png" width="140px" />
 
-# lupo
+# mupo
 
-`lupo` is a pre-processor for [Porter](https://porter.sh/) which allows you to build bundles with Lua.
+`mupo` is a pre-processor for [Porter](https://porter.sh/) which allows you to build bundles with [MoonScript](https://moonscript.org/).
 
 ## Install
 
-*Note: system should already have a working Porter installation (see [install instructions](https://porter.sh/install/)). There must also be a `luac` executable in PATH (temporarily required by [Azure/golua](https://github.com/Azure/golua)).*
+*Note: MoonScript should be installed, and system should already have a working Porter installation (see [install instructions](https://porter.sh/install/)). There must also be a `luac` executable in PATH (temporarily required by [Azure/golua](https://github.com/Azure/golua)).*
 
 Just build from source and copy into PATH (requires git, make, and Go 1.11+):
 ```
 (
   set -x && mkdir -p $GOPATH/src/github.com/jdolitsky/ && \
   cd $GOPATH/src/github.com/jdolitsky/ && \
-  [ -d lupo/ ] || git clone git@github.com:jdolitsky/lupo.git && \
-  cd lupo/ && make build && sudo mv bin/lupo /usr/local/bin/
+  [ -d mupo/ ] || git clone git@github.com:jdolitsky/mupo.git && \
+  cd mupo/ && make build && sudo mv bin/mupo /usr/local/bin/
 )
 ```
 
 ## How to use
 
-Simply use the `lupo` command in place of the `porter` command.
+Simply use the `mupo` command in place of the `porter` command.
 
-Replace your existing `porter.yaml` bundle definition with `porter.lua`.
+Replace your existing `porter.yaml` bundle definition with `porter.moon`.
 
-Here is a simple `porter.lua` example (notice global `bundle` variable):
-```lua
-local name = "my-bundle"
-local version = "0.1.0"
-local description = "this application is extremely important"
+Here is a simple `porter.moon` example (notice global `bundle` variable):
+```moon
+class Counter
+  @count: 0
 
--- Example of pushing to your personal Docker Hub account,
--- assuming USER env var matches your Docker Hub username
--- (make sure you create the "my-bundle" repo ahead of time)
-local registryHost = "docker.io"
-local registryRepo = os.getenv("USER") .. "/" .. name
+  new: =>
+    @@count += 1
 
--- Returns valid input for exec mixin
-local function execEcho (desc, msg)
-    return {description = desc, command = "bash", arguments = {"-c", "echo " .. msg}}
-end
+Counter!
+Counter!
 
-bundle = {
-    name =  name,
-    version = version,
-    description = description,
-    invocationImage = registryHost .. "/" .. registryRepo .. ":" .. version,
-    mixins = {"exec"},
-    install = {
-        {
-            exec = execEcho("Install " .. name, "Hello World")
-        }
-    },
-    uninstall = {
-        {
-            exec = execEcho("Uninstall " .. name, "Goodbye World")
-        }
-    }
-}
+print Counter.count -- prints 2
 ```
 
-Run `lupo` to build the bundle from `porter.lua`:
+Run `mupo` to build the bundle from `porter.moon`:
 ```
-$ lupo build
+$ mupo build
 Copying dependencies ===>
 Copying mixins ===>
 Copying mixin exec ===>
@@ -70,6 +48,6 @@ Copying mixin porter ===>
 ...
 ```
 
-If a file named `porter.lua` is detected in the working directory, `lupo` will attempt to use this to generate a `porter.yaml` file in the format expected by Porter, then run Porter itself.
+If a file named `porter.moon` is detected in the working directory, `mupo` will attempt to use this to generate a `porter.moon` file in the format expected by Porter, then run Porter itself.
 
-Note: if there is an existing `porter.yaml`, it will be completely overwritten. You may even wish to place `porter.yaml` in your `.gitignore`, as it is dynamically generated each run.
+Note: if there is an existing `porter.moon`, it will be completely overwritten. You may even wish to place `porter.moon` in your `.gitignore`, as it is dynamically generated each run.
