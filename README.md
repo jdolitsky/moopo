@@ -28,16 +28,50 @@ Replace your existing `porter.yaml` bundle definition with `porter.moon`.
 
 Here is a simple `porter.moon` example (notice global `bundle` variable):
 ```moon
-class Counter
-  @count: 0
+name = "my-bundle"
+version = "0.1.0"
+description = "this application is extremely important"
 
-  new: =>
-    @@count += 1
+-- Example of pushing to your personal Docker Hub account,
+-- assuming USER env var matches your Docker Hub username
+-- (make sure you create the "my-bundle" repo ahead of time)
+registry_host = "docker.io"
+registry_repo = os.getenv("USER").."/"..name
 
-Counter!
-Counter!
+-- Class that represents our app
+class MyApp
+    new: =>
+        @bundle = {
+            name: name,
+            version: version,
+            description: description,
+            invocationImage: registry_host.."/"..registry_repo..":"..version,
+            mixins: {},
+            install: {},
+            uninstall: {}
+        }
 
-print Counter.count -- prints 2
+    add_mixin: (mixin) =>
+        table.insert(@bundle.mixins, mixin)
+
+    add_install_step: (step) =>
+        table.insert(@bundle.install, step)
+
+    add_uninstall_step: (step) =>
+        table.insert(@bundle.uninstall, step)
+
+-- Method that returns valid input for exec mixin
+echo = (desc, msg) ->
+    {exec: {description: desc, command: "bash", arguments: { "-c", "echo "..msg}}}
+
+-- Create bundle and modify
+app = MyApp!
+app\add_mixin("exec")
+app\add_install_step(echo("Install "..name, "Hello World"))
+app\add_uninstall_step(echo("Uninstall "..name, "Goodbye World"))
+
+-- Export bundle
+export bundle = app.bundle
 ```
 
 Run `moopo` to build the bundle from `porter.moon`:
@@ -50,6 +84,6 @@ Copying mixin porter ===>
 ...
 ```
 
-If a file named `porter.moon` is detected in the working directory, `moopo` will attempt to use this to generate a `porter.moon` file in the format expected by Porter, then run Porter itself.
+If a file named `porter.moon` is detected in the working directory, `moopo` will attempt to use this to generate a `porter.yaml` file in the format expected by Porter, then run Porter itself.
 
-Note: if there is an existing `porter.moon`, it will be completely overwritten. You may even wish to place `porter.moon` in your `.gitignore`, as it is dynamically generated each run.
+Note: if there is an existing `porter.yaml`, it will be completely overwritten. You may even wish to place `porter.yaml` (and `porter.lua`) in your `.gitignore`, as it is dynamically generated each run.

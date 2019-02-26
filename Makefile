@@ -9,7 +9,7 @@ build: bootstrap
 build: export GO111MODULE=on
 build: export CGO_ENABLED=0
 build:
-	go build -mod=vendor -v -o bin/lupo cmd/lupo/main.go
+	go build -mod=vendor -v -o bin/moopo cmd/moopo/main.go
 
 .PHONY: tree
 tree:

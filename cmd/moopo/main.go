@@ -20,11 +20,28 @@ const (
 	luaScriptPath      = "porter.lua"
 	luaScriptGlobalVar = "bundle"
 	postRunExecutable  = "porter"
+
+	moonScriptPath       = "porter.moon"
+	moonScriptExecutable = "moonc"
 )
 
 func main() {
+	convertMoonToLua()
 	convertLuaToYaml()
 	runPorter()
+}
+
+func convertMoonToLua() {
+	// Is porter.moon is not present, skip conversion
+	if _, err := os.Stat(moonScriptPath); os.IsNotExist(err) {
+		return
+	}
+
+	cmd := exec.Command(moonScriptExecutable, "-o", luaScriptPath, moonScriptPath)
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	err := cmd.Run()
+	check(err)
 }
 
 func convertLuaToYaml() {
