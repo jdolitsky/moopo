@@ -9,8 +9,8 @@ local registryHost = "docker.io"
 local registryRepo = os.getenv("USER") .. "/" .. name
 
 -- Returns valid input for exec mixin
-local function execEcho (msg)
-    return {command = "bash", arguments = {"-c", "echo " .. msg}}
+local function execEcho (desc, msg)
+    return {description = desc, command = "bash", arguments = {"-c", "echo " .. msg}}
 end
 
 bundle = {
@@ -21,14 +21,12 @@ bundle = {
     mixins = {"exec"},
     install = {
         {
-            description = "Install " .. name,
-            exec = execEcho("Hello World")
+            exec = execEcho("Install " .. name, "Hello World")
         }
     },
     uninstall = {
         {
-            description = "Uninstall " .. name,
-            exec = execEcho("Goodbye World")
+            exec = execEcho("Uninstall " .. name, "Goodbye World")
         }
     }
 }
