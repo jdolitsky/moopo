@@ -1,4 +1,4 @@
-<img align="right" src="lupo.png" width="140px" />
+<img align="right" src="moopo.png" width="140px" />
 
 # moopo
 
