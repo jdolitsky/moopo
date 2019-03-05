@@ -37,7 +37,8 @@ func convertMoonToLua() {
 		return
 	}
 
-	cmd := exec.Command(moonScriptExecutable, "-o", luaScriptPath, moonScriptPath)
+	// This will recursively convert all .moon to .lua
+	cmd := exec.Command(moonScriptExecutable, ".")
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	err := cmd.Run()
