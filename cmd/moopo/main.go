@@ -37,12 +37,16 @@ func convertMoonToLua() {
 		return
 	}
 
+	fmt.Printf("[moopo] Converting %s to %s... ", moonScriptPath, luaScriptPath)
+
 	// This will recursively convert all .moon to .lua
 	cmd := exec.Command(moonScriptExecutable, ".")
 	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
+	cmd.Stderr = nil //os.Stderr
 	err := cmd.Run()
 	check(err)
+
+	fmt.Println("Done.")
 }
 
 func convertLuaToYaml() {
@@ -50,6 +54,8 @@ func convertLuaToYaml() {
 	if _, err := os.Stat(luaScriptPath); os.IsNotExist(err) {
 		return
 	}
+
+	fmt.Printf("[moopo] Converting %s to %s... ", luaScriptPath, yamlPath)
 
 	// Fire up Lua
 	state := lua.NewState()
@@ -72,6 +78,8 @@ func convertLuaToYaml() {
 	check(err)
 	err = ioutil.WriteFile(yamlPath, out, 0644)
 	check(err)
+
+	fmt.Println("Done.")
 }
 
 func runPorter() {
